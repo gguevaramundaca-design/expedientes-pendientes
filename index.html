@@ -1135,6 +1135,7 @@
       }
     }
   </style>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -1151,7 +1152,7 @@
     <aside>
       <div class="brand">
         <div class="brand-logo"><img src="assets/logo-ana.png" alt="ANA"></div>
-        <div><strong>DASHBOARD GERENCIAL</strong><small>AAA Cañete Fortaleza</small></div>
+        <div><strong>DASHBOARD OPERATIVO</strong><small>AAA Cañete Fortaleza</small></div>
       </div>
       <div class="side-label">Análisis</div>
       <nav class="nav" aria-label="Secciones del dashboard">
@@ -1165,7 +1166,7 @@
         <button data-view="duplicados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="8" y="8" width="12" height="12" rx="2" />
             <path d="M4 16V6a2 2 0 0 1 2-2h10" />
-          </svg>Duplicados</button>
+          </svg>Expedientes Duplicados</button>
         <button data-view="antiguos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="9" />
             <path d="M12 7v5l3 2" />
@@ -1185,7 +1186,7 @@
       <header class="topbar">
         <div>
           <h1 id="pageTitle">Expedientes pendientes</h1>
-          <p id="pageCaption">Seguimiento ejecutivo de expedientes pendientes</p>
+          <p id="pageCaption">Vista general de expedientes pendientes</p>
         </div>
         <div class="top-right">
           <div class="comment-box"><label>Comentario o aviso</label>
@@ -1197,8 +1198,8 @@
 
       <section class="filters" aria-label="Filtros encadenados">
         <div class="field"><label for="alaFilter">SEDE</label><select id="alaFilter">
-            <option value="__ALL_ALA__">Todas las ALA</option>
             <option value="__ALL_SEDES__">Todas las SEDES</option>
+            <option value="__ALL_ALA__">Todas las ALA</option>
           </select></div>
         <div class="field"><label for="areaFilter">Área</label><select id="areaFilter">
             <option value="">Todas las áreas</option>
@@ -1344,7 +1345,7 @@
         pending: ['EXPEDIENTES PENDIENTES', 'EXPEDIENTES_PENDIENTES', 'PENDIENTES', 'DATA'],
         sap: ['SAP'], urgent: ['URGENTES', 'URGENTE'], holidays: ['FERIADOS', 'FERIADO'], professionals: ['PROFESIONALES', 'PROFESIONAL'], comments: ['COMENTARIO', 'COMENTARIOS', 'COMENTARIO O AVISO', 'AVISO']
       };
-      const alaOrder = ['CHANCAY-HUARAL', 'HUAURA', 'CHILLÓN-RÍMAC-LURÍN', 'BARRANCA', 'MALA-OMAS-CAÑETE'];
+      const alaOrder = ['BARRANCA', 'CHANCAY-HUARAL', 'CHILLÓN-RÍMAC-LURÍN', 'HUAURA', 'MALA-OMAS-CAÑETE'];
       const alaColors = { 'BARRANCA': '#0c4b8f', 'CHANCAY-HUARAL': '#149dcc', 'MALA-OMAS-CAÑETE': '#e1a932', 'CHILLÓN-RÍMAC-LURÍN': '#7a5bb6', 'HUAURA': '#1c8a70' };
       const state = { raw: [], records: [], holidays: new Set(), professionals: new Map(), areas: new Map(), detailMode: 'all', comments: [], loaded: false };
       const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -1353,7 +1354,7 @@
       const fmt = n => new Intl.NumberFormat('es-PE').format(n || 0);
       const pick = (r, ...keys) => { for (const k of keys) { const nk = norm(k); if (r[nk] !== undefined && String(r[nk]).trim() !== '') return r[nk] } return '' };
       const truthy = v => { const x = norm(v); return !!x && !['NO', '0', 'FALSO', 'FALSE', 'N/A', '-', 'UNICO', 'ÚNICO'].includes(x) };
-      const normalizeProcedure = v => norm(v).replace(/^\d+[\.)\-:;\s]+/, '').replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+      const normalizeProcedure = v => norm(v).replace(/^\d+[\.)\-:;\s]+/, '').replace(/[^A-Z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
       function parseDate(v) { if (!v) return null; if (v instanceof Date && !isNaN(v)) return v; let s = String(v).trim(), m = s.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/); if (m) return new Date(+m[1], +m[2], +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)); m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/); if (m) return new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)); const d = new Date(s); return isNaN(d) ? null : d }
       const dayKey = d => d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` : '';
       const dateText = d => d ? new Intl.DateTimeFormat('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d) : '—';
@@ -1408,8 +1409,10 @@
       function setOptions(el, values, first, preserve = true) { const current = preserve ? el.value : ''; el.innerHTML = `<option value="">${esc(first)}</option>` + values.map(v => `<option value="${esc(norm(v))}">${esc(v)}</option>`).join(''); if ([...el.options].some(o => o.value === current)) el.value = current }
       function isSecretariaTecnica(sede) { const n = norm(sede); return n.includes('SECRETARIA TECNICA') || n.includes('ST ') || n.startsWith('ST-') || n.startsWith('ST.') }
       function sedeMatches(r, value) { if (value === '__ALL_ALA__') return alaOrder.includes(r.__ala); if (value === '__ALL_SEDES__' || !value) return true; return norm(r.__sede) === value }
+      /* Lista fija de ALAs para el filtro "Todas las ALA" */
+      const alaFilterLabels = ['ALA CHILLON RIMAC LURIN', 'ALA HUAURA', 'ALA BARRANCA', 'ALA CHANCAY HUARAL', 'ALA MALA OMAS CAÑETE'];
       function filteredBase(before = 'all') { let rows = state.records; const sede = $('#alaFilter').value, area = $('#areaFilter').value, pro = $('#professionalFilter').value, procedure = $('#procedureFilter').value, tupa = $('#tupaFilter').value, risk = $('#riskFilter').value, tipo = $('#tipoFilter').value, q = norm($('#searchFilter').value); return rows.filter(r => { if (!sedeMatches(r, sede)) return false; if (before !== 'area' && area && norm(r.__area) !== area) return false; if (before !== 'professional' && pro && norm(r.__professional) !== pro) return false; if (before !== 'procedure' && procedure && norm(r.__procedure) !== procedure) return false; if (tupa && r.__tupa !== tupa) return false; if (risk && r.__risk !== risk) return false; if (tipo === 'sap' && !r.__sap) return false; if (tipo === 'urgente' && !r.__urgent) return false; if (tipo === 'antiguo' && !(r.__year && r.__year <= 2024)) return false; if (q && !norm([r.__cut, r.__subject, r.__procedure, r.__professional, r.__area, r.__sede, r.__task].join(' ')).includes(q)) return false; return true }) }
-      function refreshFilters(resetDependent = false) { const sedeSel = $('#alaFilter'), areaSel = $('#areaFilter'), proSel = $('#professionalFilter'), procedureSel = $('#procedureFilter'); if (resetDependent) { const sedes = unique(state.records.map(r => r.__sede)).sort(sortAla); sedeSel.innerHTML = '<option value="__ALL_ALA__">Todas las ALA</option><option value="__ALL_SEDES__">Todas las SEDES</option><option disabled>──────────</option>' + sedes.map(v => `<option value="${esc(norm(v))}">${esc(v)}</option>`).join(''); sedeSel.value = '__ALL_ALA__' } const sede = sedeSel.value; let areaRows = state.records.filter(r => sedeMatches(r, sede)); setOptions(areaSel, unique(areaRows.map(r => r.__area)).sort(locale), 'Todas las áreas'); const area = areaSel.value; let proRows = areaRows.filter(r => !area || norm(r.__area) === area); setOptions(proSel, unique(proRows.map(r => r.__professional)).sort(locale), 'Todos los profesionales'); const pro = proSel.value; let procedureRows = proRows.filter(r => !pro || norm(r.__professional) === pro); setOptions(procedureSel, unique(procedureRows.map(r => r.__procedure)).sort(locale), 'Todos los procedimientos') }
+      function refreshFilters(resetDependent = false) { const sedeSel = $('#alaFilter'), areaSel = $('#areaFilter'), proSel = $('#professionalFilter'), procedureSel = $('#procedureFilter'); if (resetDependent) { const sedes = unique(state.records.map(r => r.__sede)).sort(locale); sedeSel.innerHTML = '<option value="__ALL_SEDES__">Todas las SEDES</option><option value="__ALL_ALA__">Todas las ALA</option><option disabled>──────────</option>' + sedes.map(v => `<option value="${esc(norm(v))}">${esc(v)}</option>`).join(''); sedeSel.value = '__ALL_SEDES__' } const sede = sedeSel.value; let areaRows = state.records.filter(r => sedeMatches(r, sede)); setOptions(areaSel, unique(areaRows.map(r => r.__area)).sort(locale), 'Todas las áreas'); const area = areaSel.value; let proRows = areaRows.filter(r => !area || norm(r.__area) === area); setOptions(proSel, unique(proRows.map(r => r.__professional)).sort(locale), 'Todos los profesionales'); const pro = proSel.value; let procedureRows = proRows.filter(r => !pro || norm(r.__professional) === pro); setOptions(procedureSel, unique(procedureRows.map(r => r.__procedure)).sort(locale), 'Todos los procedimientos') }
       const unique = a => [...new Set(a.filter(Boolean))]; const locale = (a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }); const sortAla = (a, b) => { const ia = alaOrder.indexOf(canonicalAla(a)), ib = alaOrder.indexOf(canonicalAla(b)); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || locale(a, b) };
       function countBy(rows, key, limit = 9) { const m = new Map(); for (const r of rows) { const k = typeof key === 'function' ? key(r) : r[key]; m.set(k || 'SIN DATO', (m.get(k || 'SIN DATO') || 0) + 1) } return [...m].sort((a, b) => b[1] - a[1]).slice(0, limit) }
       function kpis(el, items) { el.innerHTML = items.map(x => `<article class="kpi ${x.tone || ''}"><label>${esc(x.label)}</label><strong>${esc(x.value)}</strong><small>${esc(x.note || '')}</small></article>`).join('') }
@@ -1438,12 +1441,12 @@
       function renderOld() { const rows = filteredBase().filter(r => r.__year && r.__year <= 2024); const oldest = rows.reduce((m, r) => !m || r.__year < m ? r.__year : m, null); kpis($('#oldKpis'), [{ label: 'Expedientes antiguos', value: fmt(rows.length), note: 'Año 2024 o anterior', tone: 'red' }, { label: 'CUT únicos', value: fmt(new Set(rows.map(r => norm(r.__cut))).size), note: 'Sin repetir CUT' }, { label: 'Año más antiguo', value: oldest || '—', note: 'Según año del expediente' }, { label: 'Críticos', value: fmt(rows.filter(r => r.__risk === 'Crítico').length), note: '11 días hábiles o más', tone: 'red' }]); table($('#oldTable'), 'Expedientes antiguos', rows.sort((a, b) => (a.__year || 9999) - (b.__year || 9999) || ((b.__days || 0) - (a.__days || 0)))) }
       function detailRows() { let rows = filteredBase(); if (state.detailMode === 'sap') rows = rows.filter(r => r.__sap); if (state.detailMode === 'urgent') rows = rows.filter(r => r.__urgent); if (state.detailMode === 'critical') rows = rows.filter(r => r.__risk === 'Crítico'); return rows.sort((a, b) => (b.__days || 0) - (a.__days || 0)) }
       function renderDetail() { table($('#detailTable'), 'Detalle de expedientes', detailRows()) }
-      function exportDetail() { const rows = detailRows(); if (!rows.length) { showToast('No hay registros para exportar con los filtros actuales.', 'error'); return } const headers = ['CUT', 'SEDE', 'ÁREA', 'PROFESIONAL', 'PROCEDIMIENTO', 'TUPA', 'ESTADO', 'TAREA', 'FECHA DE INGRESO', 'DÍAS HÁBILES', 'NIVEL', 'SAP', 'URGENTE', 'ASUNTO']; const data = rows.map(r => [r.__cut, r.__sede, r.__area, r.__professional, r.__procedure, r.__tupa, r.__status, r.__task, dateText(r.__ingreso), r.__days ?? '', r.__risk, r.__sap ? 'SÍ' : 'NO', r.__urgent ? 'SÍ' : 'NO', r.__subject]); const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`; const csv = '\uFEFF' + [headers, ...data].map(row => row.map(cell).join(';')).join('\r\n'); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' }), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = `Detalle_Expedientes_${new Date().toISOString().slice(0, 10)}.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast(`${fmt(rows.length)} registros exportados.`, 'ok') }
+      function exportDetail() { const rows = detailRows(); if (!rows.length) { showToast('No hay registros para exportar con los filtros actuales.', 'error'); return } const headers = ['CUT', 'SEDE', 'ÁREA', 'PROFESIONAL', 'PROCEDIMIENTO', 'TUPA', 'ESTADO', 'TAREA', 'FECHA DE INGRESO', 'DÍAS HÁBILES', 'NIVEL', 'SAP', 'URGENTE', 'ASUNTO']; const data = rows.map(r => [r.__cut, r.__sede, r.__area, r.__professional, r.__procedure, r.__tupa, r.__status, r.__task, dateText(r.__ingreso), r.__days ?? '', r.__risk, r.__sap ? 'SÍ' : 'NO', r.__urgent ? 'SÍ' : 'NO', r.__subject]); const wsData = [headers, ...data]; const wb = XLSX.utils.book_new(); const ws = XLSX.utils.aoa_to_sheet(wsData); /* Auto-ajustar anchos de columna */ ws['!cols'] = headers.map((h, i) => ({ wch: Math.max(h.length, ...data.slice(0, 100).map(r => String(r[i] ?? '').length).concat(10)) })); XLSX.utils.book_append_sheet(wb, ws, 'Detalle'); XLSX.writeFile(wb, `Detalle_Expedientes_${new Date().toISOString().slice(0, 10)}.xlsx`); showToast(`${fmt(rows.length)} registros exportados en Excel.`, 'ok') }
       function renderAll() { renderGeneral(); renderDuplicates(); renderOld(); renderDetail() }
       function showToast(text, type = '') { const t = $('#toast'); t.textContent = text; t.className = `toast ${type}`; clearTimeout(showToast.timer); showToast.timer = setTimeout(() => t.classList.add('hidden'), 3800) }
       function switchView(id) { $$('.view').forEach(v => v.classList.toggle('active', v.id === id)); $$('.nav button').forEach(b => b.classList.toggle('active', b.dataset.view === id)); const labels = { general: ['Expedientes pendientes', 'Seguimiento ejecutivo de expedientes pendientes'], duplicados: ['Expedientes duplicados', 'Ubicación por profesional y sede'], antiguos: ['Expedientes antiguos', 'Seguimiento de expedientes del año 2024 o anteriores'], detalle: ['Detalle de expedientes', 'Consulta según los filtros seleccionados'] }; $('#pageTitle').textContent = labels[id][0]; $('#pageCaption').textContent = labels[id][1] }
       $('#enterBtn').addEventListener('click', () => $('#splash').classList.add('out')); $$('.nav button').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view))); $('#exportBtn').addEventListener('click', exportDetail);
-      $('#alaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#areaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#professionalFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#procedureFilter').addEventListener('change', renderAll); $('#tupaFilter').addEventListener('change', renderAll); $('#riskFilter').addEventListener('change', renderAll); $('#tipoFilter').addEventListener('change', renderAll); $('#searchFilter').addEventListener('input', () => { clearTimeout(state.searchTimer); state.searchTimer = setTimeout(renderAll, 180) }); $('#clearBtn').addEventListener('click', () => { $('#alaFilter').value = '__ALL_ALA__'; $('#areaFilter').value = ''; $('#professionalFilter').value = ''; $('#procedureFilter').value = ''; $('#tupaFilter').value = ''; $('#riskFilter').value = ''; $('#tipoFilter').value = ''; $('#searchFilter').value = ''; refreshFilters(); renderAll() });
+      $('#alaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#areaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#professionalFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#procedureFilter').addEventListener('change', renderAll); $('#tupaFilter').addEventListener('change', renderAll); $('#riskFilter').addEventListener('change', renderAll); $('#tipoFilter').addEventListener('change', renderAll); $('#searchFilter').addEventListener('input', () => { clearTimeout(state.searchTimer); state.searchTimer = setTimeout(renderAll, 180) }); $('#clearBtn').addEventListener('click', () => { $('#alaFilter').value = '__ALL_SEDES__'; $('#areaFilter').value = ''; $('#professionalFilter').value = ''; $('#procedureFilter').value = ''; $('#tupaFilter').value = ''; $('#riskFilter').value = ''; $('#tipoFilter').value = ''; $('#searchFilter').value = ''; refreshFilters(); renderAll() });
       $$('.section-actions [data-detail]').forEach(b => b.addEventListener('click', () => { state.detailMode = b.dataset.detail; $$('.section-actions [data-detail]').forEach(x => x.classList.toggle('active', x === b)); renderDetail() })); $('#closeDialog').addEventListener('click', () => $('#duplicateDialog').close());
       $('#todayText').textContent = new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }).format(new Date()); loadSheets();
     })();
