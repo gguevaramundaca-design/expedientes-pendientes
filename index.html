@@ -1134,6 +1134,474 @@
         padding: 26px 20px
       }
     }
+
+    /* ── Cálculo de Fechas Modal ── */
+    #calcFechasDialog {
+      width: min(680px, calc(100vw - 28px));
+      max-height: 92vh;
+      border: 0;
+      border-radius: 20px;
+      padding: 0;
+      box-shadow: 0 32px 100px rgba(3, 27, 48, .42);
+      overflow: hidden
+    }
+
+    #calcFechasDialog::backdrop {
+      background: rgba(3, 27, 48, .58);
+      backdrop-filter: blur(5px)
+    }
+
+    .calc-header {
+      background: linear-gradient(135deg, #072e53, #0c4b8f);
+      color: #fff;
+      padding: 20px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .calc-header h2 {
+      margin: 0;
+      font-size: 1.12rem;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .calc-header h2 svg {
+      width: 22px;
+      height: 22px;
+      flex: none
+    }
+
+    .calc-header button {
+      border: 0;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 1.1rem;
+      transition: background .2s
+    }
+
+    .calc-header button:hover {
+      background: rgba(255, 255, 255, .28)
+    }
+
+    .calc-body {
+      padding: 22px;
+      overflow: auto;
+      max-height: calc(92vh - 76px);
+      background: #f5f9fc
+    }
+
+    .calc-section {
+      background: #fff;
+      border: 1px solid #dce6ed;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(20, 49, 73, .05)
+    }
+
+    .calc-section-title {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 850;
+      color: #0c4b8f;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .calc-section-title svg {
+      width: 15px;
+      height: 15px;
+      flex: none
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .calc-grid.full {
+      grid-template-columns: 1fr
+    }
+
+    .calc-field label {
+      display: block;
+      margin-bottom: 5px;
+      color: #687b8b;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 800;
+      font-size: .68rem
+    }
+
+    .calc-field select,
+    .calc-field input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #cedbe4;
+      border-radius: 10px;
+      background: #fff;
+      color: #14283a;
+      padding: 0 12px;
+      font-size: .82rem;
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    .calc-field select:focus,
+    .calc-field input:focus {
+      border-color: #149dcc;
+      box-shadow: 0 0 0 3px rgba(20, 157, 204, .15)
+    }
+
+    .calc-field input[type="number"] {
+      -moz-appearance: textfield
+    }
+
+    .calc-field input[type="number"]::-webkit-inner-spin-button {
+      opacity: 1
+    }
+
+    .calc-periodos {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .calc-periodo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 36px;
+      gap: 8px;
+      align-items: end;
+      padding: 10px 12px;
+      background: #f0f6fa;
+      border-radius: 10px;
+      border: 1px solid #e0eaf1
+    }
+
+    .calc-periodo-row .calc-field label {
+      font-size: .62rem
+    }
+
+    .calc-add-periodo {
+      border: 1px dashed #b0cede;
+      background: transparent;
+      color: #0c4b8f;
+      border-radius: 10px;
+      padding: 9px;
+      cursor: pointer;
+      font-weight: 750;
+      font-size: .74rem;
+      transition: background .2s
+    }
+
+    .calc-add-periodo:hover {
+      background: #edf5fa;
+      border-color: #149dcc
+    }
+
+    .calc-remove-btn {
+      border: 0;
+      background: #fde8ea;
+      color: #a42e3a;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: .95rem;
+      transition: background .2s
+    }
+
+    .calc-remove-btn:hover {
+      background: #f9cdd1
+    }
+
+    .calc-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px;
+      background: linear-gradient(135deg, #0c4b8f, #149dcc);
+      color: #fff;
+      font-weight: 850;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(12, 75, 143, .22);
+      transition: transform .15s, box-shadow .15s;
+      margin-top: 4px
+    }
+
+    .calc-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(12, 75, 143, .3)
+    }
+
+    .calc-btn:active {
+      transform: translateY(0)
+    }
+
+    .calc-result {
+      display: none;
+      margin-top: 16px;
+      animation: calcFadeIn .35s ease
+    }
+
+    .calc-result.visible {
+      display: block
+    }
+
+    @keyframes calcFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .calc-result-card {
+      background: #fff;
+      border: 1px solid #dce6ed;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(20, 49, 73, .08)
+    }
+
+    .calc-result-header {
+      background: linear-gradient(135deg, #072e53, #0a406d);
+      color: #fff;
+      padding: 16px 18px;
+      font-weight: 800;
+      font-size: .82rem;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .calc-result-header svg {
+      width: 18px;
+      height: 18px;
+      flex: none
+    }
+
+    .calc-result-body {
+      padding: 18px
+    }
+
+    .calc-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .calc-kpi {
+      text-align: center;
+      padding: 14px 10px;
+      border-radius: 12px;
+      border: 1px solid #e0eaf1;
+      background: #f8fbfd
+    }
+
+    .calc-kpi.remaining {
+      border-color: #9bd8c4;
+      background: #edfaf5
+    }
+
+    .calc-kpi.consumed {
+      border-color: #f5c76b;
+      background: #fffbf0
+    }
+
+    .calc-kpi.deadline {
+      border-color: #b0cede;
+      background: #f0f7fc
+    }
+
+    .calc-kpi.expired {
+      border-color: #e6a8ae;
+      background: #fef0f1
+    }
+
+    .calc-kpi label {
+      display: block;
+      font-size: .64rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 800;
+      color: #687b8b;
+      margin-bottom: 6px
+    }
+
+    .calc-kpi strong {
+      font-size: 1.6rem;
+      line-height: 1;
+      display: block
+    }
+
+    .calc-kpi.remaining strong {
+      color: #148263
+    }
+
+    .calc-kpi.consumed strong {
+      color: #b8860b
+    }
+
+    .calc-kpi.deadline strong {
+      color: #0c4b8f
+    }
+
+    .calc-kpi.expired strong {
+      color: #c9434f
+    }
+
+    .calc-kpi small {
+      display: block;
+      margin-top: 5px;
+      font-size: .66rem;
+      color: #687b8b
+    }
+
+    .calc-timeline {
+      position: relative;
+      height: 32px;
+      background: #edf2f6;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px
+    }
+
+    .calc-timeline-consumed {
+      position: absolute;
+      inset: 0 auto 0 0;
+      background: linear-gradient(90deg, #e0a12d, #f0c050);
+      border-radius: 8px 0 0 8px;
+      transition: width .5s ease
+    }
+
+    .calc-timeline-remaining {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #148263, #1eb88a);
+      border-radius: 0 8px 8px 0;
+      transition: width .5s ease, left .5s ease
+    }
+
+    .calc-timeline-overflow {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #c9434f, #e25d67);
+      border-radius: 8px;
+      transition: width .5s ease
+    }
+
+    .calc-timeline-label {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .66rem;
+      font-weight: 800;
+      color: #fff;
+      padding: 0 8px;
+      white-space: nowrap
+    }
+
+    .calc-detail-rows {
+      display: grid;
+      gap: 6px
+    }
+
+    .calc-detail-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f8fbfd;
+      border-radius: 8px;
+      font-size: .76rem;
+      align-items: center
+    }
+
+    .calc-detail-row span:first-child {
+      color: #43596b
+    }
+
+    .calc-detail-row strong {
+      color: #0c4b8f;
+      font-size: .82rem
+    }
+
+    .calc-alert {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: .76rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .calc-alert.success {
+      background: #edfaf5;
+      border: 1px solid #9bd8c4;
+      color: #147057
+    }
+
+    .calc-alert.warning {
+      background: #fffbf0;
+      border: 1px solid #f5c76b;
+      color: #8c6412
+    }
+
+    .calc-alert.danger {
+      background: #fef0f1;
+      border: 1px solid #e6a8ae;
+      color: #a42e3a
+    }
+
+    .calc-nav-btn {
+      border: 0;
+      background: rgba(255, 255, 255, .12);
+      color: #d1e7f1;
+      border-radius: 10px;
+      padding: 11px 12px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 8px;
+      transition: background .2s, color .2s
+    }
+
+    .calc-nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .12)
+    }
+
+    .calc-nav-btn svg {
+      width: 18px;
+      height: 18px;
+      flex: none
+    }
   </style>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
@@ -1175,6 +1643,13 @@
             <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>Detalle</button>
       </nav>
+      <button class="calc-nav-btn" id="openCalcFechas" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke-linecap="round" />
+        </svg>Cálculo de fechas
+      </button>
       <div class="export-card">
         <button id="exportBtn" type="button">Exportar Detalle</button>
         <small>Descarga únicamente la información visible según los filtros.</small>
@@ -1337,6 +1812,85 @@
   </dialog>
   <div class="toast hidden" id="toast" role="status"></div>
 
+  <!-- ── Cálculo de Fechas Dialog ── -->
+  <dialog id="calcFechasDialog">
+    <div class="calc-header">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke-linecap="round" />
+        </svg>
+        Cálculo de Fechas
+      </h2>
+      <button id="closeCalcFechas" aria-label="Cerrar">×</button>
+    </div>
+    <div class="calc-body">
+      <!-- Procedimiento y Plazo -->
+      <div class="calc-section">
+        <div class="calc-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+            <rect x="9" y="3" width="6" height="4" rx="1" />
+          </svg>
+          Procedimiento y plazo
+        </div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label for="calcProcedure">Procedimiento</label>
+            <select id="calcProcedure">
+              <option value="">Cargando procedimientos...</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label for="calcPlazo">Plazo (días hábiles)</label>
+            <input type="number" id="calcPlazo" min="1" max="365" placeholder="Ej. 30" readonly>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fecha de inicio -->
+      <div class="calc-section">
+        <div class="calc-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m15 9-6 6M9 9l6 6" />
+          </svg>
+          Fecha de inicio del trámite
+        </div>
+        <div class="calc-grid full">
+          <div class="calc-field">
+            <label for="calcFechaInicio">Fecha de inicio</label>
+            <input type="date" id="calcFechaInicio">
+          </div>
+        </div>
+      </div>
+
+      <!-- Periodos de pausa -->
+      <div class="calc-section">
+        <div class="calc-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 9v6M14 9v6" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+          Periodos de pausa (observaciones)
+        </div>
+        <p style="margin:0 0 10px;font-size:.74rem;color:#687b8b;line-height:1.4">
+          Si el trámite se pausó por observaciones, agrega cada periodo. Se indicará la fecha en que se notificó la
+          observación y la fecha en que volvió a ingresar.
+        </p>
+        <div class="calc-periodos" id="calcPeriodos"></div>
+        <button class="calc-add-periodo" id="calcAddPeriodo" type="button">+ Agregar periodo de pausa</button>
+      </div>
+
+      <!-- Calcular -->
+      <button class="calc-btn" id="calcCalcular" type="button">Calcular días restantes</button>
+
+      <!-- Resultado -->
+      <div class="calc-result" id="calcResult"></div>
+    </div>
+  </dialog>
+
   <script>
     (() => {
       'use strict';
@@ -1347,7 +1901,7 @@
       };
       const alaOrder = ['BARRANCA', 'CHANCAY-HUARAL', 'CHILLÓN-RÍMAC-LURÍN', 'HUAURA', 'MALA-OMAS-CAÑETE'];
       const alaColors = { 'BARRANCA': '#0c4b8f', 'CHANCAY-HUARAL': '#149dcc', 'MALA-OMAS-CAÑETE': '#e1a932', 'CHILLÓN-RÍMAC-LURÍN': '#7a5bb6', 'HUAURA': '#1c8a70' };
-      const state = { raw: [], records: [], holidays: new Set(), professionals: new Map(), areas: new Map(), detailMode: 'all', comments: [], loaded: false };
+      const state = { raw: [], records: [], holidays: new Set(), professionals: new Map(), areas: new Map(), detailMode: 'all', comments: [], loaded: false, sapProcPlazos: [] };
       const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
       const norm = s => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[–—]/g, '-').trim().toUpperCase();
       const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
@@ -1390,21 +1944,30 @@
       // El cotejo ignora tildes, signos, espacios y número inicial. No usa coincidencias parciales.
       function sapProceduresFromSheet(rows) {
         const procedures = new Set();
+        const procPlazos = [];
         for (const row of rows) {
           const value = String(pick(row, 'PROCEDIMIENTO')).trim();
           if (value && norm(value) !== 'PROCEDIMIENTO') {
             const key = normalizeProcedure(value);
-            if (key) procedures.add(key);
+            if (key) {
+              procedures.add(key);
+              const plazoRaw = pick(row, 'PLAZO', 'PLAZO (DIAS HABILES)', 'PLAZO DIAS HABILES', 'DIAS HABILES', 'PLAZO (DÍAS HÁBILES)', 'DÍAS HÁBILES');
+              const plazo = parseInt(String(plazoRaw).replace(/[^0-9]/g, ''), 10) || 30;
+              if (!procPlazos.some(p => p.key === key)) {
+                procPlazos.push({ key, label: value, plazo });
+              }
+            }
           }
         }
         if (!procedures.size) throw new Error('La hoja SAP no contiene procedimientos en la columna A');
+        state.sapProcPlazos = procPlazos.sort((a, b) => a.label.localeCompare(b.label, 'es'));
         return procedures;
       }
       function extractReferences(rows) { const cuts = new Set(), procedures = new Set(); for (const r of rows) { const c = norm(pick(r, 'N° CUT', 'N CUT', 'CUT', 'EXPEDIENTE')); let p = norm(pick(r, 'PROCEDIMIENTO', 'NOMBRE DEL PROCEDIMIENTO', 'TIPO DE PROCEDIMIENTO', 'TIPO PROCEDIMIENTO')); if (!p) { const entry = Object.entries(r).find(([k, v]) => norm(k).includes('PROCED') && String(v ?? '').trim()); if (entry) p = norm(entry[1]) } if (c) cuts.add(c); if (!p && !c) { const first = String(Object.values(r).find(v => String(v ?? '').trim()) || '').trim(); if (first && !/^\d+$/.test(first)) p = norm(first) } if (p) { procedures.add(p); const clean = p.replace(/^\d+[\.)\-:;\s]+/, '').trim(); if (clean && clean !== p) procedures.add(clean) } } return { cuts, procedures } }
       function buildProfessionalMaps(rows) { state.professionals.clear(); state.areas.clear(); for (const r of rows) { const code = norm(pick(r, 'COD DE USUARIO', 'CÓD DE USUARIO', 'CODIGO DE USUARIO', 'CÓDIGO DE USUARIO', 'USUARIO', 'CODIGO')); const name = String(pick(r, 'NOMBRE DEL PROFESIONAL', 'NOMBRE PROFESIONAL', 'PROFESIONAL', 'NOMBRE')).trim(); const area = String(pick(r, 'ÁREA', 'AREA')).trim(); const chosen = name || code; if (code && chosen) state.professionals.set(code, chosen); if (code && area) state.areas.set(code, area); if (name && area) state.areas.set(norm(name), area) } }
       function enrich(rows, sapProcedures, urgentRefs) { const counts = new Map(); for (const r of rows) { const cut = norm(pick(r, 'N° CUT', 'N CUT', 'CUT', 'NRO CUT')); if (cut) counts.set(cut, (counts.get(cut) || 0) + 1) } return rows.map((r, index) => { const cut = String(pick(r, 'N° CUT', 'N CUT', 'CUT', 'NRO CUT')).trim(); const directName = String(pick(r, 'NOMBRE DEL PROFESIONAL', 'PROFESIONAL')).trim(); const rawCode = String(pick(r, 'COD DE USUARIO', 'CODIGO DE USUARIO', 'CÓDIGO DE USUARIO', 'ULTIMO ESCRITORIO', 'ÚLTIMO ESCRITORIO')).trim(); const codeNorm = norm(rawCode).split(' - -')[0].trim(); const resolved = state.professionals.get(codeNorm) || state.professionals.get(norm(rawCode)) || state.professionals.get(norm(directName)); const professional = resolved || directName || (rawCode.includes('/') ? rawCode.split('/').pop().trim() : rawCode) || codeNorm || 'SIN ASIGNAR'; const rawArea = String(pick(r, 'ÁREA', 'AREA')).trim(); const area = rawArea || state.areas.get(codeNorm) || state.areas.get(norm(rawCode)) || state.areas.get(norm(professional)) || 'SIN ÁREA'; const rawSede = String(pick(r, 'ULTIMO SEDE', 'ÚLTIMO SEDE')).trim() || 'SIN SEDE'; const ala = canonicalAla(rawSede); const ingreso = parseDate(pick(r, 'FEC_INGRESO', 'FECHA DE INGRESO', 'FECHA INGRESO', 'F. INGRESO', 'FEC_CREACION', 'FECHA CREACION')); const days = businessDays(ingreso); const year = yearOf(cut, pick(r, 'AÑO', 'ANIO'), parseDate(pick(r, 'FEC_CREACION', 'FECHA CREACION')) || ingreso); const nk = norm(cut); const procedure = String(pick(r, 'PROCEDIMIENTO', 'TIPO DOCUMENTO', 'TIPO DE DOCUMENTO')).trim() || 'SIN PROCEDIMIENTO'; const np = normalizeProcedure(procedure); const tupaRaw = norm(pick(r, 'TUPA', 'TIPO TUPA')); const tupa = tupaRaw.includes('NO TUPA') ? 'NO TUPA' : tupaRaw === 'TUPA' || tupaRaw.includes(' TUPA') ? 'TUPA' : 'SIN CLASIFICAR'; return { ...r, __id: index, __cut: cut || 'SIN CUT', __sede: rawSede, __ala: ala, __area: area, __professional: professional, __ingreso: ingreso, __days: days, __risk: riskOf(days), __year: year, __duplicate: (counts.get(nk) || 0) > 1 || norm(pick(r, 'DUPLICADOS', 'DUPLICADO')).includes('DUPLIC'), __sap: sapProcedures.has(np), __urgent: urgentRefs.cuts.has(nk) || urgentRefs.procedures.has(np) || truthy(pick(r, 'URGENTES', 'URGENTE')), __subject: String(pick(r, 'ASUNTO', 'DESCRIPCION', 'DESCRIPCIÓN')).trim(), __procedure: procedure, __tupa: tupa, __status: String(pick(r, 'ESTADO', 'SITUACION', 'SITUACIÓN')).trim() || 'SIN ESTADO', __task: String(pick(r, 'TAREA', 'ULTIMA TAREA', 'ÚLTIMA TAREA')).trim() || 'SIN TAREA' } }) }
       function extractComments(rows) { return unique(rows.flatMap(r => Object.values(r)).map(v => String(v ?? '').trim()).filter(v => v && !['COMENTARIO', 'COMENTARIOS'].includes(norm(v)))) }
-      function processData(parts) { state.raw = parts.pending; state.holidays = new Set(parts.holidays.map(r => parseDate(pick(r, 'FECHA', 'FERIADO', 'DÍA', 'DIA', Object.keys(r)[0]))).filter(Boolean).map(dayKey)); buildProfessionalMaps(parts.professionals); state.records = enrich(parts.pending, sapProceduresFromSheet(parts.sap), extractReferences(parts.urgent)); state.comments = extractComments(parts.comments); state.loaded = true; $('#commentText').textContent = state.comments.join('\n') || 'Sin comentario registrado.'; refreshFilters(true); renderAll(); showToast(`Información actualizada: ${fmt(state.records.length)} registros`, 'ok') }
+      function processData(parts) { state.raw = parts.pending; state.holidays = new Set(parts.holidays.map(r => parseDate(pick(r, 'FECHA', 'FERIADO', 'DÍA', 'DIA', Object.keys(r)[0]))).filter(Boolean).map(dayKey)); buildProfessionalMaps(parts.professionals); state.records = enrich(parts.pending, sapProceduresFromSheet(parts.sap), extractReferences(parts.urgent)); state.comments = extractComments(parts.comments); state.loaded = true; $('#commentText').textContent = state.comments.join('\n') || 'Sin comentario registrado.'; refreshFilters(true); renderAll(); populateCalcProcedures(); showToast(`Información actualizada: ${fmt(state.records.length)} registros`, 'ok') }
       async function loadSheets() { try { const pending = await loadCandidate(names.pending, true); const [sap, urgent, holidays, professionals, comments] = await Promise.all([loadCandidate(names.sap, true), loadCandidate(names.urgent), loadCandidate(names.holidays), loadCandidate(names.professionals), loadCandidate(names.comments)]); processData({ pending: pending.rows, sap: sap.rows, urgent: urgent.rows, holidays: holidays.rows, professionals: professionals.rows, comments: comments.rows }) } catch (e) { showToast('No se pudo cargar pendientes o SAP. Revisa el acceso y la columna PROCEDIMIENTO.', 'error') } }
       function setOptions(el, values, first, preserve = true) { const current = preserve ? el.value : ''; el.innerHTML = `<option value="">${esc(first)}</option>` + values.map(v => `<option value="${esc(norm(v))}">${esc(v)}</option>`).join(''); if ([...el.options].some(o => o.value === current)) el.value = current }
       function isSecretariaTecnica(sede) { const n = norm(sede); return n.includes('SECRETARIA TECNICA') || n.includes('ST ') || n.startsWith('ST-') || n.startsWith('ST.') }
@@ -1449,6 +2012,246 @@
       $('#alaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#areaFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#professionalFilter').addEventListener('change', () => { refreshFilters(); renderAll() }); $('#procedureFilter').addEventListener('change', renderAll); $('#tupaFilter').addEventListener('change', renderAll); $('#riskFilter').addEventListener('change', renderAll); $('#tipoFilter').addEventListener('change', renderAll); $('#searchFilter').addEventListener('input', () => { clearTimeout(state.searchTimer); state.searchTimer = setTimeout(renderAll, 180) }); $('#clearBtn').addEventListener('click', () => { $('#alaFilter').value = '__ALL_SEDES__'; $('#areaFilter').value = ''; $('#professionalFilter').value = ''; $('#procedureFilter').value = ''; $('#tupaFilter').value = ''; $('#riskFilter').value = ''; $('#tipoFilter').value = ''; $('#searchFilter').value = ''; refreshFilters(); renderAll() });
       $$('.section-actions [data-detail]').forEach(b => b.addEventListener('click', () => { state.detailMode = b.dataset.detail; $$('.section-actions [data-detail]').forEach(x => x.classList.toggle('active', x === b)); renderDetail() })); $('#closeDialog').addEventListener('click', () => $('#duplicateDialog').close());
       $('#todayText').textContent = new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }).format(new Date()); loadSheets();
+
+      /* ═══════════════════════════════════════════════════════════
+         CÁLCULO DE FECHAS – Mini plataforma
+         ═══════════════════════════════════════════════════════════ */
+      function populateCalcProcedures() {
+        const sel = $('#calcProcedure');
+        let html = '<option value="">— Seleccionar procedimiento —</option>';
+        for (const p of state.sapProcPlazos) {
+          html += `<option value="${esc(p.key)}" data-plazo="${p.plazo}">${esc(p.label)}</option>`;
+        }
+        html += '<option value="__OTROS__">OTROS (personalizado)</option>';
+        sel.innerHTML = html;
+        $('#calcPlazo').value = '';
+        $('#calcPlazo').readOnly = true;
+      }
+
+      $('#calcProcedure').addEventListener('change', () => {
+        const sel = $('#calcProcedure');
+        const plazoInput = $('#calcPlazo');
+        if (sel.value === '__OTROS__') {
+          plazoInput.value = '';
+          plazoInput.readOnly = false;
+          plazoInput.placeholder = 'Ingrese plazo';
+          plazoInput.focus();
+        } else if (sel.value) {
+          const opt = sel.options[sel.selectedIndex];
+          plazoInput.value = opt.dataset.plazo || '30';
+          plazoInput.readOnly = true;
+        } else {
+          plazoInput.value = '';
+          plazoInput.readOnly = true;
+        }
+      });
+
+      // Periodos de pausa
+      let periodoCount = 0;
+      function addPeriodo(fechaPausa = '', fechaRetorno = '') {
+        periodoCount++;
+        const id = periodoCount;
+        const div = document.createElement('div');
+        div.className = 'calc-periodo-row';
+        div.dataset.periodoId = id;
+        div.innerHTML = `
+          <div class="calc-field">
+            <label>Fecha notif. observación</label>
+            <input type="date" class="calc-pausa" value="${fechaPausa}">
+          </div>
+          <div class="calc-field">
+            <label>Fecha reingreso</label>
+            <input type="date" class="calc-retorno" value="${fechaRetorno}">
+          </div>
+          <button class="calc-remove-btn" type="button" title="Eliminar periodo">×</button>
+        `;
+        div.querySelector('.calc-remove-btn').addEventListener('click', () => div.remove());
+        $('#calcPeriodos').appendChild(div);
+      }
+      $('#calcAddPeriodo').addEventListener('click', () => addPeriodo());
+
+      // Cálculo de días hábiles entre dos fechas (sin contar día final)
+      function countBizDays(startDate, endDate) {
+        if (!startDate || !endDate) return 0;
+        let a = new Date(startDate); a.setHours(12, 0, 0, 0);
+        let b = new Date(endDate); b.setHours(12, 0, 0, 0);
+        if (a > b) return 0;
+        let n = 0;
+        for (let d = new Date(a); d <= b; d.setDate(d.getDate() + 1)) {
+          if (d.getDay() !== 0 && d.getDay() !== 6 && !state.holidays.has(dayKey(d))) n++;
+        }
+        return n;
+      }
+
+      // Calcular la fecha límite sumando N días hábiles desde una fecha
+      function addBizDays(startDate, numDays) {
+        let d = new Date(startDate);
+        d.setHours(12, 0, 0, 0);
+        let added = 0;
+        while (added < numDays) {
+          d.setDate(d.getDate() + 1);
+          if (d.getDay() !== 0 && d.getDay() !== 6 && !state.holidays.has(dayKey(d))) {
+            added++;
+          }
+        }
+        return d;
+      }
+
+      $('#calcCalcular').addEventListener('click', () => {
+        const plazo = parseInt($('#calcPlazo').value, 10);
+        const fechaInicioStr = $('#calcFechaInicio').value;
+
+        if (!fechaInicioStr) { showToast('Ingresa la fecha de inicio del trámite.', 'error'); return; }
+        if (!plazo || plazo <= 0) { showToast('Selecciona un procedimiento o ingresa un plazo válido.', 'error'); return; }
+
+        const fechaInicio = new Date(fechaInicioStr + 'T12:00:00');
+
+        // Recoger periodos de pausa
+        const periodos = [];
+        $$('.calc-periodo-row').forEach(row => {
+          const pausa = row.querySelector('.calc-pausa').value;
+          const retorno = row.querySelector('.calc-retorno').value;
+          if (pausa && retorno) {
+            periodos.push({
+              pausa: new Date(pausa + 'T12:00:00'),
+              retorno: new Date(retorno + 'T12:00:00')
+            });
+          }
+        });
+        periodos.sort((a, b) => a.pausa - b.pausa);
+
+        // Calcular días consumidos total
+        // Sin pausas: contar días desde inicio hasta hoy
+        // Con pausas: contar solo los periodos activos
+        const hoy = new Date(); hoy.setHours(12, 0, 0, 0);
+        let diasConsumidos = 0;
+        let detalleConsumo = [];
+
+        if (periodos.length === 0) {
+          // Sin pausas: todo el tiempo desde inicio hasta hoy
+          diasConsumidos = countBizDays(fechaInicio, hoy);
+          detalleConsumo.push({ desde: fechaInicio, hasta: hoy, dias: diasConsumidos, tipo: 'activo' });
+        } else {
+          // Periodo activo 1: desde inicio hasta primera pausa
+          let d1 = countBizDays(fechaInicio, new Date(periodos[0].pausa.getTime() - 86400000));
+          if (d1 < 0) d1 = 0;
+          diasConsumidos += d1;
+          detalleConsumo.push({ desde: fechaInicio, hasta: periodos[0].pausa, dias: d1, tipo: 'activo' });
+
+          // Pausas y periodos intermedios activos
+          for (let i = 0; i < periodos.length; i++) {
+            const pausaDias = countBizDays(periodos[i].pausa, periodos[i].retorno);
+            detalleConsumo.push({ desde: periodos[i].pausa, hasta: periodos[i].retorno, dias: pausaDias, tipo: 'pausa' });
+
+            // Periodo activo después de esta pausa
+            const siguienteFin = (i + 1 < periodos.length) ? new Date(periodos[i + 1].pausa.getTime() - 86400000) : hoy;
+            const activoDias = countBizDays(periodos[i].retorno, siguienteFin);
+            diasConsumidos += activoDias;
+            detalleConsumo.push({ desde: periodos[i].retorno, hasta: siguienteFin, dias: activoDias, tipo: 'activo' });
+          }
+        }
+
+        const diasRestantes = Math.max(0, plazo - diasConsumidos);
+        const diasExcedidos = Math.max(0, diasConsumidos - plazo);
+        const vencido = diasConsumidos >= plazo;
+
+        // Calcular fecha límite
+        let fechaLimite;
+        if (periodos.length === 0) {
+          fechaLimite = addBizDays(fechaInicio, plazo);
+        } else {
+          // La fecha límite se calcula desde la última fecha de retorno + días restantes
+          const ultimoRetorno = periodos[periodos.length - 1].retorno;
+          if (diasRestantes > 0) {
+            fechaLimite = addBizDays(ultimoRetorno, diasRestantes - 1);
+          } else {
+            fechaLimite = new Date(ultimoRetorno);
+          }
+        }
+
+        // Nombre del procedimiento
+        const procSel = $('#calcProcedure');
+        const procName = procSel.value === '__OTROS__' ? 'Personalizado' : (procSel.options[procSel.selectedIndex]?.textContent || 'Sin seleccionar');
+
+        // Render resultado
+        const pct = Math.min(100, (diasConsumidos / plazo) * 100);
+        const resultDiv = $('#calcResult');
+        resultDiv.innerHTML = `
+          <div class="calc-result-card">
+            <div class="calc-result-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              Resultado — ${esc(procName)}
+            </div>
+            <div class="calc-result-body">
+              <div class="calc-kpis">
+                <div class="calc-kpi consumed">
+                  <label>Días consumidos</label>
+                  <strong>${diasConsumidos}</strong>
+                  <small>de ${plazo} hábiles</small>
+                </div>
+                <div class="calc-kpi ${vencido ? 'expired' : 'remaining'}">
+                  <label>${vencido ? 'Días excedidos' : 'Días restantes'}</label>
+                  <strong>${vencido ? diasExcedidos : diasRestantes}</strong>
+                  <small>${vencido ? 'plazo vencido' : 'días hábiles'}</small>
+                </div>
+                <div class="calc-kpi deadline">
+                  <label>Fecha límite</label>
+                  <strong style="font-size:1.1rem">${dateText(fechaLimite)}</strong>
+                  <small>para dar respuesta</small>
+                </div>
+              </div>
+
+              <div class="calc-timeline">
+                ${vencido
+            ? `<div class="calc-timeline-overflow" style="width:100%"><span class="calc-timeline-label" style="right:8px">Excedido ${diasExcedidos} día(s)</span></div>`
+            : `<div class="calc-timeline-consumed" style="width:${pct}%"><span class="calc-timeline-label" style="left:4px">${diasConsumidos}d</span></div><div class="calc-timeline-remaining" style="left:${pct}%;width:${100 - pct}%"><span class="calc-timeline-label" style="right:4px">${diasRestantes}d</span></div>`
+          }
+              </div>
+
+              <div class="calc-detail-rows">
+                <div class="calc-detail-row"><span>📅 Fecha de inicio</span><strong>${dateText(fechaInicio)}</strong></div>
+                <div class="calc-detail-row"><span>📋 Plazo total</span><strong>${plazo} días hábiles</strong></div>
+                ${periodos.map((p, i) => `
+                  <div class="calc-detail-row" style="background:#fff8e8">
+                    <span>⏸️ Pausa ${i + 1}: observación</span>
+                    <strong>${dateText(p.pausa)}</strong>
+                  </div>
+                  <div class="calc-detail-row" style="background:#eefaf5">
+                    <span>▶️ Reingreso ${i + 1}</span>
+                    <strong>${dateText(p.retorno)}</strong>
+                  </div>
+                `).join('')}
+                <div class="calc-detail-row"><span>📊 Días hábiles consumidos (activos)</span><strong>${diasConsumidos} de ${plazo}</strong></div>
+                <div class="calc-detail-row"><span>🏁 Fecha límite de respuesta</span><strong>${dateText(fechaLimite)}</strong></div>
+              </div>
+
+              ${vencido
+            ? `<div class="calc-alert danger">⚠️ El plazo ha vencido. Se ha excedido por <strong>${diasExcedidos} día(s) hábil(es)</strong>.</div>`
+            : diasRestantes <= 3
+              ? `<div class="calc-alert warning">⏰ ¡Atención! Solo quedan <strong>${diasRestantes} día(s) hábil(es)</strong> para responder.</div>`
+              : `<div class="calc-alert success">✅ Quedan <strong>${diasRestantes} día(s) hábil(es)</strong> para dar respuesta. Fecha límite: ${dateText(fechaLimite)}.</div>`
+          }
+            </div>
+          </div>
+        `;
+        resultDiv.classList.add('visible');
+      });
+
+      // Abrir / cerrar el dialog
+      $('#openCalcFechas').addEventListener('click', () => {
+        $('#calcResult').classList.remove('visible');
+        $('#calcResult').innerHTML = '';
+        $('#calcFechaInicio').value = '';
+        $('#calcPeriodos').innerHTML = '';
+        periodoCount = 0;
+        if ($('#calcProcedure').options.length > 2) {
+          $('#calcProcedure').value = '';
+          $('#calcPlazo').value = '';
+          $('#calcPlazo').readOnly = true;
+        }
+        $('#calcFechasDialog').showModal();
+      });
+      $('#closeCalcFechas').addEventListener('click', () => $('#calcFechasDialog').close());
     })();
   </script>
 </body>
