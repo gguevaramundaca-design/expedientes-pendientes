@@ -2155,18 +2155,32 @@
         const diasExcedidos = Math.max(0, diasConsumidos - plazo);
         const vencido = diasConsumidos >= plazo;
 
-        // Calcular fecha límite
-        let fechaLimite;
-        if (periodos.length === 0) {
-          fechaLimite = addBizDays(fechaInicio, plazo);
-        } else {
-          // La fecha límite se calcula desde la última fecha de retorno + días restantes
-          const ultimoRetorno = periodos[periodos.length - 1].retorno;
-          if (diasRestantes > 0) {
-            fechaLimite = addBizDays(ultimoRetorno, diasRestantes - 1);
-          } else {
-            fechaLimite = new Date(ultimoRetorno);
+        // Calcular fecha límite: recorrer día a día desde fecha de inicio,
+        // contando solo días hábiles que NO caen en periodos de pausa,
+        // hasta completar el plazo. Las pausas desplazan la fecha límite.
+        function isInPausa(date, pausas) {
+          const dk = date.getTime();
+          for (const p of pausas) {
+            const pStart = new Date(p.pausa); pStart.setHours(0, 0, 0, 0);
+            const pEnd = new Date(p.retorno); pEnd.setHours(23, 59, 59, 999);
+            if (dk >= pStart.getTime() && dk <= pEnd.getTime()) return true;
           }
+          return false;
+        }
+        let fechaLimite;
+        {
+          let d = new Date(fechaInicio);
+          d.setHours(12, 0, 0, 0);
+          let counted = 0;
+          // El día de inicio cuenta como día 1 si es hábil y no está en pausa
+          while (counted < plazo) {
+            if (d.getDay() !== 0 && d.getDay() !== 6 && !state.holidays.has(dayKey(d)) && !isInPausa(d, periodos)) {
+              counted++;
+              if (counted >= plazo) break;
+            }
+            d.setDate(d.getDate() + 1);
+          }
+          fechaLimite = new Date(d);
         }
 
         // Nombre del procedimiento
